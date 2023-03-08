@@ -232,13 +232,25 @@ app.post('/login-user', async (req, res) => {
         return res.json({ error: 'error' });
       }
     }
-
     res.json({ status: 'error', error: 'InvAlid Password' });
   } catch (error) {
     console.log(error.message);
     return res.status(500).send({ message: 'Error!' });
   }
 });
+// app.post('/check-emp', async (req, res) => {
+//   try {
+//     const { Name, Email, phNum } = req.body;
+//     const user = await Employee.findOne({ Email });
+//     if (!user) {
+//       return res.json({ error: 'User Not found' });
+//     }
+//     return res.json({ status: 'ok', data: token });
+//   } catch (error) {
+//     console.log(error.message);
+//     return res.status(500).send({ message: 'Error!' });
+//   }
+// });
 
 app.post('/registerorg', async (req, res) => {
   try {
