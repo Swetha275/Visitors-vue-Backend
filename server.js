@@ -121,13 +121,19 @@ app.post('/add_visitors', async (req, res) => {
 app.post('/add_emp', async (req, res) => {
   try {
     const { Name, phNum, Email, offmail } = req.body;
-    const employee = new Employee({
-      Name,
-      phNum,
-      Email,
-      offmail,
-    });
-    await employee.save();
+    const employee_exist = await Employee.findOne({ Email });
+    if (employee_exist!==null) {
+      return res.json({ error: 'Employee already exists!' });
+    }
+    else{
+      const employee = new Employee({
+        Name,
+        phNum,
+        Email,
+        offmail,
+      });
+      await employee.save();
+    }
     res.status(201).send({ message: 'Added successfully' });
   } catch (error) {
     console.log(error.message);
@@ -238,19 +244,20 @@ app.post('/login-user', async (req, res) => {
     return res.status(500).send({ message: 'Error!' });
   }
 });
-// app.post('/check-emp', async (req, res) => {
-//   try {
-//     const { Name, Email, phNum } = req.body;
-//     const user = await Employee.findOne({ Email });
-//     if (!user) {
-//       return res.json({ error: 'User Not found' });
-//     }
-//     return res.json({ status: 'ok', data: token });
-//   } catch (error) {
-//     console.log(error.message);
-//     return res.status(500).send({ message: 'Error!' });
-//   }
-// });
+app.post('/check_emp', async (req, res) => {
+  try {
+    const {Email} = req.body;
+    const employee = await Employee.findOne({ Email });
+    console.log(employee);
+    if (employee!==null) {
+      return res.json({ error: 'Employee already exists!' });
+    }
+    return res.json({ status: 'ok'});
+  } catch (error) {
+    console.log(error.message);
+    return res.status(500).send({ message: 'Error!' });
+  }
+});
 
 app.post('/registerorg', async (req, res) => {
   try {
