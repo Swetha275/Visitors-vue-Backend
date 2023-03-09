@@ -123,7 +123,7 @@ app.post('/add_emp', async (req, res) => {
     const { Name, phNum, Email, offmail } = req.body;
     const employee_exist = await Employee.findOne({ Email });
     if (employee_exist!==null) {
-      return res.json({ error: 'Employee already exists!' });
+      res.status(201).send({ message: 'Employee already exists!' });
     }
     else{
       const employee = new Employee({
